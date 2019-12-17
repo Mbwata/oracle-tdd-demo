@@ -98,7 +98,7 @@ CREATE OR REPLACE PACKAGE BODY auto_tests AS
     EXCEPTION
         WHEN OTHERS THEN
             EXECUTE IMMEDIATE vteardown;
-            IF sqlcode = -20001 THEN
+            IF sqlcode = -20001 THEN 
                 log_test_results(vtest_name, vproc, vinputs, 'PASS', NULL);
             ELSE
                 log_test_results(vtest_name, vproc, vinputs, 'FAIL', sqlerrm);
