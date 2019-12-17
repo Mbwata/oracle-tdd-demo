@@ -3,7 +3,8 @@
 --------------------------------------------------------
 
   CREATE TABLE "STAGE_2" 
-   ("CLAIM_ID" NUMBER,
+   ("STAGE_1_ID" NUMBER,
+    "CLAIM_ID" NUMBER,
    "CLAIM_TYPE" VARCHAR2(20 BYTE),  
 	"CLAIM_DATE" DATE, 
 	"CLAIM_AMOUNT" NUMBER, 
