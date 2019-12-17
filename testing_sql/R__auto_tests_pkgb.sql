@@ -7,7 +7,7 @@ CREATE OR REPLACE PACKAGE BODY auto_tests AS
         iproc_tested     test_history.proc_tested%TYPE,
         iinputs          test_history.inputs%TYPE,
         iresult          test_history.result%TYPE,
-        ierror_message   test_history.error_message%TYPE
+        ierror_message   test_history.error_message%TYPE 
     ) IS
     BEGIN
         IF gtest_run IS NULL THEN
