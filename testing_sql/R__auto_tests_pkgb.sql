@@ -20,7 +20,7 @@ CREATE OR REPLACE PACKAGE BODY auto_tests AS
 
         END IF;
 
-        INSERT INTO footie.test_history (
+        INSERT INTO test_history (
             test_run_id,
             test_date,
             test_name,
