@@ -1,4 +1,4 @@
-create or replace PACKAGE BODY accum_engine AS
+CREATE OR REPLACE PACKAGE BODY accum_engine AS
 
     PROCEDURE move_rx_stage_1_to_stage_2 (
         iclaim_id NUMBER
@@ -19,47 +19,22 @@ create or replace PACKAGE BODY accum_engine AS
             );
 
     END move_rx_stage_1_to_stage_2;
-    
-    
-        PROCEDURE delete_rx_stage_1(
+
+    PROCEDURE delete_rx_stage_1 (
         iclaim_id NUMBER
-    )is
-    begin
+    ) IS
+    BEGIN
+        DELETE FROM stage_1_rx_claims
+        WHERE
+            claim_id = iclaim_id;
 
-    delete from stage_1_rx_claims where claim_id = iclaim_id;
+    END delete_rx_stage_1;
 
-    end delete_rx_stage_1;
-    
-PROCEDURE create_member_accumulation (
+    PROCEDURE create_member_accumulation (
         imember_id VARCHAR2
-    ) is
-    
-    begin
-    
-    null;
-    
-    end;
-    
-
-
-        PROCEDURE delete_rx_stage_1(
-        iclaim_id NUMBER
-    )is
-    begin
-
-    delete from stage_1_rx_claims where claim_id = iclaim_id;
-
-    end delete_rx_stage_1;
-
-PROCEDURE create_member_accumulation (
-        imember_id VARCHAR2
-    ) is
-
-    begin
-
-    null;
-
-    end;
-
+    ) IS
+    BEGIN
+        NULL;
+    END;
 
 END accum_engine;
