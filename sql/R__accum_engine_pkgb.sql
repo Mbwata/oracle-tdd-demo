@@ -34,7 +34,25 @@ CREATE OR REPLACE PACKAGE BODY accum_engine AS
         imember_id VARCHAR2
     ) IS
     BEGIN
-        NULL;
+        INSERT INTO member_accumulation
+            ( SELECT
+                imember_id,
+                0,
+                0,
+                'N',
+                NULL
+            FROM
+                dual
+            WHERE
+                NOT EXISTS (
+                    SELECT
+                        'X'
+                    FROM member_accumulation
+                    WHERE
+                        member_id = imember_id
+                )
+            );
+
     END;
 
 END accum_engine;
