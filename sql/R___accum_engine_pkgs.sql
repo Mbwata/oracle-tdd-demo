@@ -3,4 +3,8 @@ CREATE OR REPLACE PACKAGE accum_engine AS
         iclaim_id NUMBER
     );
 
+PROCEDURE delete_rx_stage_1 (
+        iclaim_id NUMBER
+    );
+
 END accum_engine;
