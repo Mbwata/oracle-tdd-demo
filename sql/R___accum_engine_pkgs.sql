@@ -11,4 +11,9 @@ PROCEDURE create_member_accumulation (
         imember_id VARCHAR2
     );
 
+PROCEDURE accumulate_rx_claims (
+        iclaim_amount NUMBER,
+        imember_id VARCHAR2
+    );
+
 END accum_engine;

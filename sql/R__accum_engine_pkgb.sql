@@ -53,6 +53,28 @@ CREATE OR REPLACE PACKAGE BODY accum_engine AS
                 )
             );
 
-    END;
+    END create_member_accumulation;
+    
+    PROCEDURE accumulate_rx_claims (
+        iclaim_amount   NUMBER,
+        imember_id      VARCHAR2
+    ) IS
+        vexisting_amount NUMBER;
+    BEGIN
+        SELECT
+            rx_total
+        INTO vexisting_amount
+        FROM
+            member_accumulation
+        WHERE
+            member_id = imember_id;
+
+        UPDATE member_accumulation
+        SET
+            rx_total = ( vexisting_amount + iclaim_amount )
+        WHERE
+            member_id = imember_id;
+
+    END accumulate_rx_claims;
 
 END accum_engine;
