@@ -26,7 +26,8 @@ CREATE OR REPLACE PACKAGE BODY auto_tests AS
             test_name,
             proc_tested,
             inputs,
-            result,ERROR_MESSAGE
+            result,
+            error_message
         ) VALUES (
             gtest_run,
             systimestamp,
@@ -77,6 +78,9 @@ CREATE OR REPLACE PACKAGE BODY auto_tests AS
         WHERE
             test_id = itest_id;
 
+        IF vsetup IS NOT NULL THEN
+            EXECUTE IMMEDIATE vsetup;
+        END IF;
         vproc_call := 'BEGIN '
                       || vproc
                       || '('
@@ -98,7 +102,7 @@ CREATE OR REPLACE PACKAGE BODY auto_tests AS
     EXCEPTION
         WHEN OTHERS THEN
             EXECUTE IMMEDIATE vteardown;
-            IF sqlcode = -20001 THEN 
+            IF sqlcode = -20001 THEN
                 log_test_results(vtest_name, vproc, vinputs, 'PASS', NULL);
             ELSE
                 log_test_results(vtest_name, vproc, vinputs, 'FAIL', sqlerrm);
