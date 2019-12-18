@@ -7,4 +7,8 @@ PROCEDURE delete_rx_stage_1 (
         iclaim_id NUMBER
     );
 
+PROCEDURE create_member_accumulation (
+        imember_id VARCHAR2
+    );
+
 END accum_engine;

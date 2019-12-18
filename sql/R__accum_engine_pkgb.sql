@@ -29,5 +29,16 @@ CREATE OR REPLACE PACKAGE BODY accum_engine AS
     delete from stage_1_rx_claims where claim_id = iclaim_id;
 
     end delete_rx_stage_1;
+    
+PROCEDURE create_member_accumulation (
+        imember_id VARCHAR2
+    ) is
+    
+    begin
+    
+    null;
+    
+    end;
+    
 
 END accum_engine;
