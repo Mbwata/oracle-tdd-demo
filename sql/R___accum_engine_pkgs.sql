@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE accum_engine AS
+create or replace PACKAGE accum_engine AS
     PROCEDURE move_rx_stage_1_to_stage_2 (
         iclaim_id NUMBER
     );

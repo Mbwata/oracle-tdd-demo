@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY accum_engine AS
+create or replace PACKAGE BODY accum_engine AS
 
     PROCEDURE move_rx_stage_1_to_stage_2 (
         iclaim_id NUMBER
@@ -40,5 +40,26 @@ PROCEDURE create_member_accumulation (
     
     end;
     
+
+
+        PROCEDURE delete_rx_stage_1(
+        iclaim_id NUMBER
+    )is
+    begin
+
+    delete from stage_1_rx_claims where claim_id = iclaim_id;
+
+    end delete_rx_stage_1;
+
+PROCEDURE create_member_accumulation (
+        imember_id VARCHAR2
+    ) is
+
+    begin
+
+    null;
+
+    end;
+
 
 END accum_engine;
