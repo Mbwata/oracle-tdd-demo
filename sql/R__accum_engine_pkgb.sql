@@ -20,6 +20,13 @@ CREATE OR REPLACE PACKAGE BODY accum_engine AS
 
     END move_rx_stage_1_to_stage_2;
 
+    PROCEDURE move_med_stage_1_to_stage_2 (
+        iclaim_id NUMBER
+    ) IS
+    BEGIN
+        NULL;
+    END move_med_stage_1_to_stage_2;
+
     PROCEDURE delete_rx_stage_1 (
         iclaim_id NUMBER
     ) IS
@@ -47,14 +54,15 @@ CREATE OR REPLACE PACKAGE BODY accum_engine AS
                 NOT EXISTS (
                     SELECT
                         'X'
-                    FROM member_accumulation
+                    FROM
+                        member_accumulation
                     WHERE
                         member_id = imember_id
                 )
             );
 
     END create_member_accumulation;
-    
+
     PROCEDURE accumulate_rx_claims (
         iclaim_amount   NUMBER,
         imember_id      VARCHAR2
@@ -76,5 +84,41 @@ CREATE OR REPLACE PACKAGE BODY accum_engine AS
             member_id = imember_id;
 
     END accumulate_rx_claims;
+
+    PROCEDURE archive_stage_2_record (
+        istage_2_id NUMBER
+    ) IS
+    BEGIN
+        -- Never do insert statements this way. Super bad practice kids.
+        INSERT INTO stage_2_archive
+            ( SELECT
+                stage_2_id,
+                claim_id,
+                claim_type,
+                claim_date,
+                claim_amount,
+                member_id,
+                systimestamp
+            FROM
+                stage_2
+            WHERE
+                stage_2_id = istage_2_id
+            );
+        
+    END archive_stage_2_record;
+
+    PROCEDURE delete_stage_2_record (
+        istage_2_id NUMBER
+    ) IS
+    BEGIN
+        NULL;
+    END delete_stage_2_record;
+
+    PROCEDURE check_deductable (
+        imember_id VARCHAR2
+    ) IS
+    BEGIN
+        NULL;
+    END check_deductable;
 
 END accum_engine;

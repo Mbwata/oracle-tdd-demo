@@ -12,7 +12,7 @@ null;
 end;','rollback',null);
 
 Insert into ACCUMS.TESTS (TEST_ID,TEST_NAME,PROC_NAME,INPUTS,SETUP,VALIDATION,TEARDOWN,EXCEPTIONS) values (3,'CREATE NEW MEMBER ACCUM RECORD IF ONE DOESN''T EXIST','accum_engine.create_member_accumulation','''MEMBER 000''','    INSERT INTO accums.stage_2 (
-        stage_1_id,
+        stage_2_id,
         claim_id,
         claim_type,
         claim_date,
@@ -48,7 +48,7 @@ END;','rollback',null);
 
 Insert into ACCUMS.TESTS (TEST_ID,TEST_NAME,PROC_NAME,INPUTS,SETUP,VALIDATION,TEARDOWN,EXCEPTIONS) values (4,'DON''T CREATE A RECORD IF ONE ALREADY EXISTS','accum_engine.create_member_accumulation','''MEMBER 000''','begin
     INSERT INTO accums.stage_2 (
-        stage_1_id,
+        stage_2_id,
         claim_id,
         claim_type,
         claim_date,
