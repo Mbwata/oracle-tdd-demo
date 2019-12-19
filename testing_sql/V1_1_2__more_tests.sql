@@ -94,3 +94,26 @@ from member_accumulation
 where rx_total = 200
 and member_id = ''MEMBER 000'';
 end;','rollback',null);
+Insert into ACCUMS.TESTS (TEST_ID,TEST_NAME,PROC_NAME,INPUTS,SETUP,VALIDATION,TEARDOWN,EXCEPTIONS) values (6,'ARCHIVE STAGE 2 RECORD','accum_engine.archive_stage_2_record','-1001','    INSERT INTO accums.stage_2 (
+        stage_2_id,
+        claim_id,
+        claim_type,
+        claim_date,
+        claim_amount,
+        member_id
+    ) VALUES (
+        -1001,
+        - 1000,
+        ''RX'',
+        SYSDATE,
+        1000.99,
+        ''MEMEBER 000''
+    )','declare
+vTEST VARCHAR2(20):= NULL;
+
+begin
+select ''X''
+into vTEST
+from stage_2_archive
+where stage_2_id = -1001;
+end;','rollback',null);
