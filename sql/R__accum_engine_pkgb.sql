@@ -104,21 +104,39 @@ CREATE OR REPLACE PACKAGE BODY accum_engine AS
             WHERE
                 stage_2_id = istage_2_id
             );
-        
+
     END archive_stage_2_record;
 
     PROCEDURE delete_stage_2_record (
         istage_2_id NUMBER
     ) IS
     BEGIN
-        NULL;
+        DELETE FROM stage_2
+        WHERE
+            stage_2_id = istage_2_id;
+
     END delete_stage_2_record;
 
     PROCEDURE check_deductable (
         imember_id VARCHAR2
     ) IS
     BEGIN
-        NULL;
+        UPDATE member_accumulation
+        SET
+            met_deductable = 'Y',
+            met_deductable_date = SYSDATE
+        WHERE
+            member_id = imember_id
+            AND met_deductable = 'N'
+            AND ( rx_total + med_total ) >= (
+                SELECT
+                    deductible_threshold
+                FROM
+                    members
+                WHERE
+                    member_id = imember_id
+            );
+
     END check_deductable;
 
 END accum_engine;

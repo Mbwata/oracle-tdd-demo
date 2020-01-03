@@ -117,3 +117,60 @@ into vTEST
 from stage_2_archive
 where stage_2_id = -1001;
 end;','rollback',null);
+
+Insert into ACCUMS.TESTS (TEST_ID,TEST_NAME,PROC_NAME,INPUTS,SETUP,VALIDATION,TEARDOWN,EXCEPTIONS) values (7,'DELETE STAGE 2 RECORD','accum_engine.delete_stage_2_record','-1001','    INSERT INTO accums.stage_2 (
+        stage_2_id,
+        claim_id,
+        claim_type,
+        claim_date,
+        claim_amount,
+        member_id
+    ) VALUES (
+        -1001,
+        - 1000,
+        ''RX'',
+        SYSDATE,
+        1000.99,
+        ''MEMEBER 000''
+    )','declare
+vTEST VARCHAR2(20):= NULL;
+
+begin
+select ''X''
+into vTEST
+from stage_2
+where stage_2_id = -1001;
+raise_application_error( -20002, ''RECORD NOT DELETED'' );
+exception when NO_DATA_FOUND then
+null;
+end;','rollback',null);
+
+Insert into ACCUMS.TESTS (TEST_ID,TEST_NAME,PROC_NAME,INPUTS,SETUP,VALIDATION,TEARDOWN,EXCEPTIONS) values (8,'CHECK FOR MET DEDUCTIBLE - YES','accum_engine.check_deductable','''MEMBER 000''','begin
+insert into member_accumulation (member_id,rx_total,med_total,met_deductable) values (''MEMBER 000'',100,100,''N'');
+insert into members (member_id, deductible_threshold) values (''MEMBER 000'',200);
+end;','declare
+vTEST VARCHAR2(20):= NULL;
+
+begin
+select ''X''
+into vTEST
+from member_accumulation
+where member_id = ''MEMBER 000''
+and met_deductable = ''Y'';
+end;
+','rollback',null);
+
+Insert into ACCUMS.TESTS (TEST_ID,TEST_NAME,PROC_NAME,INPUTS,SETUP,VALIDATION,TEARDOWN,EXCEPTIONS) values (9,'CHECK FOR MET DEDUCTIBLE - NO','accum_engine.check_deductable','''MEMBER 000''','begin
+insert into member_accumulation (member_id,rx_total,med_total,met_deductable) values (''MEMBER 000'',100,99,''N'');
+insert into members (member_id, deductible_threshold) values (''MEMBER 000'',200);
+end;','declare
+vTEST VARCHAR2(20):= NULL;
+
+begin
+select ''X''
+into vTEST
+from member_accumulation
+where member_id = ''MEMBER 000''
+and met_deductable = ''N'';
+end;
+','rollback',null);
