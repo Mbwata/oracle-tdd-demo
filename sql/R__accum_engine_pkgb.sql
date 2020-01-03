@@ -139,4 +139,71 @@ CREATE OR REPLACE PACKAGE BODY accum_engine AS
 
     END check_deductable;
 
+    PROCEDURE run_engine IS
+
+        vrx_claim_id        NUMBER;
+        vmember_record_id   VARCHAR2(20);
+        vrx_claim_amount        NUMBER;
+        vrx_member_record_id   VARCHAR2(20);
+        CURSOR find_stage_1_rx_claims IS
+        SELECT
+            claim_id
+        FROM
+            stage_1_rx_claims;
+
+        CURSOR find_stage_2_members IS
+        SELECT DISTINCT
+            member_id
+        FROM
+            stage_2;
+        
+        CURSOR find_stage_2_rx_amounts IS
+        select distinct a.member_id,(select sum(claim_amount)
+from stage_2
+where claim_type = 'RX'
+and member_id = a.member_id)
+from stage_2 a;  
+
+    BEGIN
+        OPEN find_stage_1_rx_claims;
+        LOOP
+            FETCH find_stage_1_rx_claims INTO vrx_claim_id;
+            EXIT WHEN find_stage_1_rx_claims%notfound;
+            move_rx_stage_1_to_stage_2(vrx_claim_id);
+            delete_rx_stage_1(vrx_claim_id);
+            --dbms_output.put_line();
+        END LOOP;
+
+        CLOSE find_stage_1_rx_claims;
+        
+         OPEN find_stage_2_members;
+        LOOP
+            FETCH find_stage_2_members INTO vmember_record_id;
+            EXIT WHEN find_stage_2_members%notfound;
+            create_member_accumulation(vmember_record_id);
+        END LOOP;
+
+        CLOSE find_stage_2_members;     
+        
+                 OPEN find_stage_2_rx_amounts;
+        LOOP
+            FETCH find_stage_2_rx_amounts INTO vrx_member_record_id,vrx_claim_amount;
+            EXIT WHEN find_stage_2_rx_amounts%notfound;
+            accumulate_rx_claims(vrx_claim_amount,vrx_member_record_id);
+        END LOOP;
+
+        CLOSE find_stage_2_rx_amounts;  
+        
+                 OPEN find_stage_2_members;
+        LOOP
+            FETCH find_stage_2_members INTO vmember_record_id;
+            EXIT WHEN find_stage_2_members%notfound;
+            check_deductable(vmember_record_id);
+        END LOOP;
+
+        CLOSE find_stage_2_members;     
+        
+        
+    END run_engine;
+
 END accum_engine;

@@ -32,4 +32,6 @@ CREATE OR REPLACE PACKAGE accum_engine AS
         imember_id VARCHAR2
     );
 
+    PROCEDURE run_engine;
+
 END accum_engine;
