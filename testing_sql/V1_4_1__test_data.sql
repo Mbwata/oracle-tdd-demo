@@ -21014,4 +21014,4 @@ Insert into ACCUMS.TEST_MEMBERS (MEMBER_ID,MEMBER_NAME,DEDUCTIBLE_THRESHOLD) val
 Insert into ACCUMS.TEST_MEMBERS (MEMBER_ID,MEMBER_NAME,DEDUCTIBLE_THRESHOLD) values (-253,'MEMBER 253',11000);
 
 update test_med_claims set member_id = member_id * -1;
-update test_tx_claims set member_id = member_id * -1;
+update test_rx_claims set member_id = member_id * -1;
