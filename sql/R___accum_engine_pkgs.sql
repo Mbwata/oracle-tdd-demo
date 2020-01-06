@@ -11,13 +11,22 @@ CREATE OR REPLACE PACKAGE accum_engine AS
         iclaim_id NUMBER
     );
 
+PROCEDURE delete_med_stage_1 (
+        iclaim_id NUMBER
+    );
+
     PROCEDURE create_member_accumulation (
-        imember_id VARCHAR2
+        imember_id number
     );
 
     PROCEDURE accumulate_rx_claims (
         iclaim_amount   NUMBER,
-        imember_id      VARCHAR2
+        imember_id      number
+    );
+
+    PROCEDURE accumulate_med_claims (
+        iclaim_amount   NUMBER,
+        imember_id      number
     );
 
     PROCEDURE archive_stage_2_record (
@@ -29,7 +38,7 @@ CREATE OR REPLACE PACKAGE accum_engine AS
     );
 
     PROCEDURE check_deductable (
-        imember_id VARCHAR2
+        imember_id number
     );
 
     PROCEDURE run_engine;
