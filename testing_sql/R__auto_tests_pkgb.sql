@@ -38,9 +38,20 @@ CREATE OR REPLACE PACKAGE BODY auto_tests AS
             ierror_message
         );
 
+if ierror_message is not null then 
+
         dbms_output.put_line(iresult
                              || ' - '
+                             || itest_name||' - '||ierror_message);
+
+else 
+
+dbms_output.put_line(iresult
+                             || ' - '
                              || itest_name);
+
+end if;
+
         COMMIT;
     END log_test_results;
 
