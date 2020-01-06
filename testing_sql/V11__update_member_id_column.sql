@@ -15,4 +15,9 @@ drop table members;
 
       insert into members (select member_seq.nextval, MEMBER_ID, DEDUCTIBLE_THRESHOLD from members2);
 
+-- go
+
+
   drop table MEMBERS2;    
+
+
