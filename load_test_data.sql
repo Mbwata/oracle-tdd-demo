@@ -8,6 +8,6 @@ commit;
 
 
 --delete from stage_2_archive where claim_id < 0;
---delete from member_accumulation where claim_id < 0;
+--delete from member_accumulation where member_id < 0;
 --delete from members where member_id < 0;
 commit;

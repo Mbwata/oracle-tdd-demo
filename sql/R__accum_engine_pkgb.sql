@@ -61,7 +61,7 @@ CREATE OR REPLACE PACKAGE BODY accum_engine AS
     END delete_med_stage_1;
 
     PROCEDURE create_member_accumulation (
-        imember_id number
+        imember_id NUMBER
     ) IS
     BEGIN
         INSERT INTO member_accumulation
@@ -88,7 +88,7 @@ CREATE OR REPLACE PACKAGE BODY accum_engine AS
 
     PROCEDURE accumulate_rx_claims (
         iclaim_amount   NUMBER,
-        imember_id      number
+        imember_id      NUMBER
     ) IS
         vexisting_amount NUMBER;
     BEGIN
@@ -110,7 +110,7 @@ CREATE OR REPLACE PACKAGE BODY accum_engine AS
 
     PROCEDURE accumulate_med_claims (
         iclaim_amount   NUMBER,
-        imember_id      number
+        imember_id      NUMBER
     ) IS
         vexisting_amount NUMBER;
     BEGIN
@@ -163,7 +163,7 @@ CREATE OR REPLACE PACKAGE BODY accum_engine AS
     END delete_stage_2_record;
 
     PROCEDURE check_deductable (
-        imember_id number
+        imember_id NUMBER
     ) IS
     BEGIN
         UPDATE member_accumulation
@@ -188,11 +188,11 @@ CREATE OR REPLACE PACKAGE BODY accum_engine AS
 
         vrx_claim_id               NUMBER;
         vmed_claim_id              NUMBER;
-        vstage2_claim_id              NUMBER;
+        vstage2_claim_id           NUMBER;
         vmember_record_id          VARCHAR2(20);
-        vstage2_claim_amount       NUMBER;
+        vstage2_claim_amount_med   NUMBER;
         vstage2_member_record_id   VARCHAR2(20);
-        vstage2_claim_type         VARCHAR2(20);
+        vstage2_claim_amount_rx    VARCHAR2(20);
         CURSOR find_stage_1_rx_claims IS
         SELECT
             claim_id
@@ -214,16 +214,24 @@ CREATE OR REPLACE PACKAGE BODY accum_engine AS
         CURSOR find_stage_2_claim_amounts IS
         SELECT DISTINCT
             a.member_id,
-            a.claim_type,
-            (
+            nvl((
                 SELECT
                     SUM(claim_amount)
                 FROM
                     stage_2
                 WHERE
                     member_id = a.member_id
-                    and claim_type = a.claim_type
-            )
+                    AND claim_type = 'RX'
+            ), 0),
+            nvl((
+                SELECT
+                    SUM(claim_amount)
+                FROM
+                    stage_2
+                WHERE
+                    member_id = a.member_id
+                    AND claim_type = 'MED'
+            ), 0)
         FROM
             stage_2 a;
 
@@ -270,17 +278,15 @@ CREATE OR REPLACE PACKAGE BODY accum_engine AS
         LOOP
             FETCH find_stage_2_claim_amounts INTO
                 vstage2_member_record_id,
-                vstage2_claim_type,
-                vstage2_claim_amount;
+                vstage2_claim_amount_rx,
+                vstage2_claim_amount_med;
             EXIT WHEN find_stage_2_claim_amounts%notfound;
-            IF vstage2_claim_type = 'RX' THEN
-                accumulate_rx_claims(vstage2_claim_amount, vstage2_member_record_id);
-            ELSE
-                IF vstage2_claim_type = 'MED' THEN
-                    accumulate_med_claims(vstage2_claim_amount, vstage2_member_record_id);
-                END IF;
+            IF vstage2_claim_amount_rx > 0 THEN
+                accumulate_rx_claims(vstage2_claim_amount_rx, vstage2_member_record_id);
             END IF;
-
+            IF vstage2_claim_amount_med > 0 THEN
+                accumulate_med_claims(vstage2_claim_amount_med, vstage2_member_record_id);
+            END IF;
         END LOOP;
 
         CLOSE find_stage_2_claim_amounts;
@@ -292,8 +298,7 @@ CREATE OR REPLACE PACKAGE BODY accum_engine AS
         END LOOP;
 
         CLOSE find_stage_2_members;
-        
-                OPEN find_stage_2_claims;
+        OPEN find_stage_2_claims;
         LOOP
             FETCH find_stage_2_claims INTO vstage2_claim_id;
             EXIT WHEN find_stage_2_claims%notfound;
@@ -302,8 +307,6 @@ CREATE OR REPLACE PACKAGE BODY accum_engine AS
         END LOOP;
 
         CLOSE find_stage_2_claims;
-        
-        
     END run_engine;
 
 END accum_engine;
