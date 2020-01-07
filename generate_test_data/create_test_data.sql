@@ -3,12 +3,22 @@ DECLARE
     vcounter         NUMBER;
     vlow_range       NUMBER;
     vhigh_range      NUMBER;
+    vmembers number;
+    vclaims number;
 BEGIN
+
+--How many members do you want?
+vmembers := 10;
+
+--How many claim do you want?
+
+vclaims := 10;
+
     vmember_number := NULL;
-    vcounter := 1;
+    vcounter := 0;
 
 --delete from members;
-    WHILE vcounter != 100 LOOP
+    WHILE vcounter != vmembers LOOP
         SELECT
             member_seq.NEXTVAL
         INTO vmember_number
@@ -28,7 +38,7 @@ BEGIN
     END LOOP;
 
     COMMIT;
-    vcounter := 1;
+    vcounter := 0;
     SELECT
         MIN(member_id)
     INTO vlow_range
@@ -41,7 +51,7 @@ BEGIN
     FROM
         members;
 
-    WHILE vcounter != 100 LOOP
+    WHILE vcounter != vclaims LOOP
         INSERT INTO stage_1_rx_claims (
             claim_id,
             claim_date,
