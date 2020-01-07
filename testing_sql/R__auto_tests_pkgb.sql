@@ -131,7 +131,7 @@ end if;
         vtest_id      tests.test_id%TYPE;
     BEGIN
         IF itest_id IS NULL THEN
-            vsql := 'select test_id from tests';
+            vsql := 'select test_id from tests order by 1 asc';
         ELSE
             vsql := 'select test_id from tests where test_id = ' || itest_id;
         END IF;
