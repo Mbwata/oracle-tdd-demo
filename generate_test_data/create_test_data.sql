@@ -12,7 +12,7 @@ vmembers := 10;
 
 --How many claim do you want?
 
-vclaims := 10;
+vclaims := 100;
 
     vmember_number := NULL;
     vcounter := 0;
