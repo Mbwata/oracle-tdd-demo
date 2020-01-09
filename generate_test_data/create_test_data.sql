@@ -8,11 +8,11 @@ DECLARE
 BEGIN
 
 --How many members do you want?
-vmembers := 10;
+vmembers := &no_of_members;
 
 --How many claim do you want?
 
-vclaims := 100;
+vclaims := &no_of_claims;
 
     vmember_number := NULL;
     vcounter := 0;

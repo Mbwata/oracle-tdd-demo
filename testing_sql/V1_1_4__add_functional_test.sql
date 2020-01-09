@@ -1,5 +1,4 @@
-Insert into ACCUMS.TESTS (TEST_ID,TEST_NAME,PROC_NAME,INPUTS,SETUP,VALIDATION,TEARDOWN,EXCEPTIONS) values (12,'FUNCTIONAL TEST','--accum_engine.run_engine
-null',null,'begin
+Insert into ACCUMS.TESTS (TEST_ID,TEST_NAME,PROC_NAME,INPUTS,SETUP,VALIDATION,TEARDOWN,EXCEPTIONS) values (12,'FUNCTIONAL TEST','accum_engine.run_engine',null,'begin
 insert into stage_1_rx_claims (select * from test_rx_claims);
 
 insert into stage_1_med_claims (select * from test_med_claims);
