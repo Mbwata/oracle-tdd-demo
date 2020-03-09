@@ -1,1 +1,1 @@
-create sequence test_run_id_seq;
+CREATE SEQUENCE test_run_id_seq;

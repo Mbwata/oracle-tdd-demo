@@ -7,7 +7,7 @@ CREATE OR REPLACE PACKAGE BODY auto_tests AS
         iproc_tested     test_history.proc_tested%TYPE,
         iinputs          test_history.inputs%TYPE,
         iresult          test_history.result%TYPE,
-        ierror_message   test_history.error_message%TYPE 
+        ierror_message   test_history.error_message%TYPE
     ) IS
     BEGIN
         IF gtest_run IS NULL THEN
@@ -38,19 +38,17 @@ CREATE OR REPLACE PACKAGE BODY auto_tests AS
             ierror_message
         );
 
-if ierror_message is not null then 
-
-        dbms_output.put_line(iresult
-                             || ' - '
-                             || itest_name||' - '||ierror_message);
-
-else 
-
-dbms_output.put_line(iresult
-                             || ' - '
-                             || itest_name);
-
-end if;
+        IF ierror_message IS NOT NULL THEN
+            dbms_output.put_line(iresult
+                                 || ' - '
+                                 || itest_name
+                                 || ' - '
+                                 || ierror_message);
+        ELSE
+            dbms_output.put_line(iresult
+                                 || ' - '
+                                 || itest_name);
+        END IF;
 
         COMMIT;
     END log_test_results;

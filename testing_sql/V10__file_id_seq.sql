@@ -1,0 +1,1 @@
+create sequence file_id_seq;
